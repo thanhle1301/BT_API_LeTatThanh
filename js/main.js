@@ -10,22 +10,82 @@ function renderProductList(productArr) {
                         <td>${product.price}</td>
                         <td>${product.img}</td>
                         <td>${product.desc}</td>
+                        <td>
+                          <button onclick='editProduct(${product.id})' class="btn btn-warning">Edit</button>
+                          <button onclick='deleteProduct(${product.id})' class="btn btn-danger">Delete</button>
+                        </td>
                     </tr>`;
+    // 3.1 gắn onclick vào để xử lý
     contentHTML = contentHTML + trString;
   }
   document.getElementById("tblDanhSachSP").innerHTML = contentHTML;
 }
-// 1. Lấy dữ liệu từ sever về
-axios({
-  url: "https://65118c9a829fa0248e4052bf.mockapi.io/product",
-  method: "GET",
-})
-  .then(function (res) {
-    console.log("Lấy dữ liệu từ sever thành công :", res);
-
-    renderProductList(res.data); // 1.1 tao function chứa mỗi data của sever
-    console.log("🚀 - renderProductList:", renderProductList);
+// 3.2 tạo function ngoài để refesh lại khi xóa, ...
+function fetchProductList() {
+  // 1. Lấy dữ liệu từ sever về
+  axios({
+    url: "https://65118c9a829fa0248e4052bf.mockapi.io/product",
+    method: "GET",
   })
-  .catch(function (err) {
-    console.log("Lấy dữ liệu từ sever thất bại :", err);
-  });
+    .then(function (res) {
+      console.log("Lấy dữ liệu từ sever thành công :", res);
+
+      renderProductList(res.data.reverse()); // 1.1 tao function chứa mỗi data của sever
+    })
+    .catch(function (err) {
+      console.log("Lấy dữ liệu từ sever thất bại :", err);
+    });
+}
+fetchProductList();
+
+// 3. thêm chức năng xóa
+function deleteProduct(id) {
+  // console.log("🚀 - deleteProduct - id:", id);
+  axios({
+    url: `https://65118c9a829fa0248e4052bf.mockapi.io/product/${id}`,
+
+    method: "DELETE",
+  })
+    .then(function (res) {
+      fetchProductList();
+    })
+    .catch(function (res) {
+      // console.log("🚀 - delete xóa thất bại: ", res);
+    });
+}
+// 4. chức năng thêm
+function addProduct() {
+  var newProduct = getDataForm();
+  axios({
+    url: "https://65118c9a829fa0248e4052bf.mockapi.io/product",
+    method: "POST",
+    data: newProduct, // gọi api và đưa new Product lên sever
+  })
+    .then(function (res) {
+      console.log("add product", res);
+      alert("thêm ok");
+      fetchProductList(); // render lại data layout
+    })
+    .catch(function (res) {
+      // console.log("🚀 - addProduct - res:", res);
+    });
+}
+
+// //5.1 tạo selector để chứa data sửa
+var selectorId = null;
+// 5. add Edit product
+function editProduct(id) {
+  selectorId = id;
+  axios({
+    url: `https://65118c9a829fa0248e4052bf.mockapi.io/product/${id}`,
+    method: "GET",
+  })
+    .then(function (res) {
+      console.log("🚀 - .then - res:", res);
+      // $("#myModal").modal("show");
+      // showDataForm(res.data);
+    })
+    .catch(function (err) {
+      console.log("🚀 - editProduct - err:", err);
+    });
+}
