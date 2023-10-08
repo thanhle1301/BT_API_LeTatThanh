@@ -1,3 +1,4 @@
+var selectorId = null;
 // 2. cho hiển thị lên layout
 function renderProductList(productArr) {
   var contentHTML = "";
@@ -50,7 +51,7 @@ function deleteProduct(id) {
       fetchProductList();
     })
     .catch(function (res) {
-      // console.log("🚀 - delete xóa thất bại: ", res);
+      console.log("🚀 - delete xóa thất bại: ", res);
     });
 }
 // 4. chức năng thêm
@@ -70,9 +71,6 @@ function addProduct() {
       // console.log("🚀 - addProduct - res:", res);
     });
 }
-
-// //5.1 tạo selector để chứa data sửa
-var selectorId = null;
 // 5. add Edit product
 function editProduct(id) {
   selectorId = id;
@@ -81,11 +79,24 @@ function editProduct(id) {
     method: "GET",
   })
     .then(function (res) {
-      console.log("🚀 - .then - res:", res);
-      // $("#myModal").modal("show");
-      // showDataForm(res.data);
+      console.log( res);
+      $("#myModal").modal("show");
+      showDataForm(res.data);
     })
     .catch(function (err) {
       console.log("🚀 - editProduct - err:", err);
     });
+}
+function updateProduct() {
+  var product = getDataForm();
+  axios({
+    url: `https://65118c9a829fa0248e4052bf.mockapi.io/product/${selectorId}`,
+    method: "PUT",
+    data: product,
+  }).then(function(res){
+    $("#myModal").modal("hide");
+    fetchProductList()
+  })
+  .catch(function(err){});
+
 }
