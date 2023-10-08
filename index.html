@@ -15,9 +15,22 @@
       integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
       crossorigin="anonymous"
     />
+    <style>
+      #spinner {
+        height: 100vh;
+        width: 100vw;
+        background: #000;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 10;
+      }
+    </style>
   </head>
 
   <body>
+    <div id="spinner"></div>
+
     <div class="container">
       <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
         <a class="navbar-brand" href="#">Navbar</a>

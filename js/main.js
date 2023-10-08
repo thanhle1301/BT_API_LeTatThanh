@@ -23,22 +23,26 @@ function renderProductList(productArr) {
 }
 // 3.2 tạo function ngoài để refesh lại khi xóa, ...
 function fetchProductList() {
+turnOnLoading();
+
   // 1. Lấy dữ liệu từ sever về
   axios({
     url: "https://65118c9a829fa0248e4052bf.mockapi.io/product",
     method: "GET",
   })
     .then(function (res) {
+      turnOffLoading();
       console.log("Lấy dữ liệu từ sever thành công :", res);
 
       renderProductList(res.data.reverse()); // 1.1 tao function chứa mỗi data của sever
     })
     .catch(function (err) {
+      turnOffLoading();
+
       console.log("Lấy dữ liệu từ sever thất bại :", err);
     });
 }
 fetchProductList();
-
 // 3. thêm chức năng xóa
 function deleteProduct(id) {
   // console.log("🚀 - deleteProduct - id:", id);
@@ -87,8 +91,10 @@ function editProduct(id) {
       console.log("🚀 - editProduct - err:", err);
     });
 }
+// 6. update lại khi edit ..
 function updateProduct() {
   var product = getDataForm();
+  console.log(product);
   axios({
     url: `https://65118c9a829fa0248e4052bf.mockapi.io/product/${selectorId}`,
     method: "PUT",

@@ -17,3 +17,12 @@ function showDataForm(product) {
   document.getElementById("HinhSP").value = product.img;
   document.getElementById("MoTaSP").value = product.desc;
 }
+
+function turnOnLoading() {
+  document.querySelector("#spinner").style.display = "flex";
+
+}
+function turnOffLoading() {
+  document.querySelector("#spinner").style.display = "none";
+
+}
